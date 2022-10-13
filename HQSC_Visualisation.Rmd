@@ -1,0 +1,105 @@
+---
+title: "HQSC_Cancer_Data"
+author: "Kyle Gibson"
+date: "25/09/2022"
+output: word_document
+---
+
+```{r}
+library(readxl)
+library(ggplot2)
+library(gridBase)
+library(gridExtra)
+library(gridGraphics)
+
+getwd()
+setwd("C:\\HQSC")
+
+avg_death_rate_male <- read.csv("avg_death_rate_male.csv")  # Reading in table from SQL query.
+View(avg_death_rate_male)                                   # Viewing data.
+
+plot(avg_death_rate_male$Year, avg_death_rate_male$Average.Death.Rate.for.Males..Per.100.K., xlab = "Year", ylab = "Average Death Rate for Males (Per 100 K Population)", pch = 19, col = "firebrick")
+lines(avg_death_rate_male, col = "cadetblue4")     # Traditional graphics used but I have decided to use ggplot going forward.
+
+
+p1 <- ggplot(data = avg_death_rate_male, mapping = aes(x = Year, y = Average.Death.Rate.for.Males..Per.100.K.)) + 
+  geom_point(col = "firebrick") + 
+  labs(y = "Average Death Rate for Males (Per 100 K Population)", x = "Year") + geom_line(col = "cadetblue4")+
+  stat_smooth(method = "lm", se = FALSE, col = "firebrick3") 
+  
+
+avg_death_rate_female <- read.csv("avg_death_rate_female.csv")
+
+p2 <- ggplot(data = avg_death_rate_female, mapping = aes(x = Year, y = Average.Death.Rate.for.Females..Per.100.K.)) + 
+  geom_point(col = "firebrick") + 
+  labs(y = "Average Death Rate for Females (Per 100 K Population)", x = "Year") + geom_line(col = "cadetblue4")+
+  stat_smooth(method = "lm", se = FALSE, col = "firebrick3")
+
+
+grid.arrange(p1, p2, nrow = 2)  # Viewing male and female death rate plots.
+
+
+total_cancer_deaths <- read.csv("total_cancer_deaths.csv")
+View(total_cancer_deaths)
+
+
+p3 <- ggplot(data = total_cancer_deaths, mapping = aes(x = Year, y = Total.Cancer.Deaths)) + 
+  geom_point(col = "firebrick") + 
+  labs(y = "Total Cancer Deaths (1996-2018)", x = "Year") + geom_line(col = "cadetblue4")+
+  stat_smooth(method = "lm", se = FALSE, col = "firebrick3")
+
+total_cancer_regs <- read.csv("total_cancer_regs.csv")
+
+p4 <- ggplot(data = total_cancer_regs, mapping = aes(x = Year, y = Total.Cancer.Registrations)) + 
+  geom_point(col = "firebrick") + 
+  labs(y = "Total Cancer Registrations (1996-2018)", x = "Year") + geom_line(col = "cadetblue4")+
+  stat_smooth(method = "lm", se = FALSE, col = "firebrick3")
+
+grid.arrange(p3, p4, nrow = 2)
+
+avg_death_rate_over_time <- read.csv("avg_death_rate_over_time.csv")
+View(avg_death_rate_over_time)
+
+p5 <- ggplot(data = total_cancer_regs, mapping = aes(x = Year, y = avg_death_rate_over_time$Total.Cancer.Death.Rate.Per.100.K..1996.2018.)) + 
+  geom_point(col = "firebrick") + 
+  labs(y = "Total Cancer Death Rate Per 100 K (1996-2018)", x = "Year") + geom_line(col = "cadetblue4")+
+  stat_smooth(method = "lm", se = FALSE, col = "firebrick3")
+
+total_cancer_regs_rate <- read.csv("total_cancer_regs_rate.csv")
+
+p6 <- ggplot(data = total_cancer_regs_rate, mapping = aes(x = Year, y = Total.Cancer.Registration.Rate.Per.100.K..1996.2018.)) + 
+  geom_point(col = "firebrick") + 
+  labs(y = "Total Cancer Registration Rate Per 100 K (1996-2018)", x = "Year") + geom_line(col = "cadetblue4")+
+  stat_smooth(method = "lm", se = FALSE, col = "firebrick3")
+
+grid.arrange(p5, p6, nrow = 2)
+
+
+total_death_rate_cancer_type <- read.csv("total_death_rate_cancer_type.csv")
+
+ggplot(total_death_rate_cancer_type, mapping = aes(x = Total.Cancer.Death.Rate..Per.100.K.Population., y = Cancer.Type)) +
+  geom_point(col = "fire brick") +
+  labs(y = "Cancer Type", x = "Total Cancer Death Rate Per 100 K (1996-2018)")+
+  stat_smooth(method = "lm")
+  
+
+
+avg_reg_rate_male <- read.csv("avg_reg_rate_male.csv")  
+
+p7 <- ggplot(data = avg_reg_rate_male, mapping = aes(x = Year, y = Average.Registration.Rate.for.Males..Per.100.K.)) + 
+  geom_point(col = "firebrick") + 
+  labs(y = "Average Registration Rate for Males", x = "Year") + geom_line(col = "cadetblue4")+
+  stat_smooth(method = "lm", se = FALSE, col = "firebrick3") 
+
+
+avg_reg_rate_female <- read.csv("avg_reg_rate_female.csv")
+
+p8 <- ggplot(data = avg_reg_rate_female, mapping = aes(x = Year, y = Average.Registration.Rate.for.Females..Per.100.K.)) + 
+  geom_point(col = "firebrick") + 
+  labs(y = "Average Registration Rate for Females", x = "Year") + geom_line(col = "cadetblue4")+
+  stat_smooth(method = "lm", se = FALSE, col = "firebrick3")
+
+grid.arrange(p7, p8, nrow = 2)
+
+```
+
